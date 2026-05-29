@@ -12,44 +12,83 @@
             color: #f0f6fc;
             font-family: system-ui, -apple-system, sans-serif;
         }
-        .glass-panel {
-            background: rgba(22, 27, 34, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(48, 54, 65, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        
+        /* Animated Gradient Text */
+        .text-gradient {
+            background: linear-gradient(270deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 3s ease infinite;
         }
-        .neon-glow {
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
         }
+
+        /* Enhanced Premium Glass */
+        .glass-panel-premium {
+            background: linear-gradient(135deg, rgba(22, 27, 34, 0.7) 0%, rgba(13, 17, 23, 0.4) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-panel-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px 0 rgba(56, 189, 248, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Anomaly Card Entrance Animation */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        /* Custom Scrollbar for Alert Stream */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.5); }
     </style>
 </head>
 <body class="p-6 min-h-screen">
 
     <div class="max-w-6xl mx-auto space-y-6">
-        <header class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
+        <header class="glass-panel-premium p-6 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold tracking-wider text-sky-400 neon-glow">ARIMA ANOMALY ENGINE</h1>
+                <h1 class="text-2xl font-bold tracking-wider text-gradient">ARIMA ANOMALY ENGINE</h1>
                 <p class="text-sm text-gray-400">Statistical Arbitrage & Market Distortion Tracker</p>
             </div>
             <div class="flex items-center gap-3 flex-wrap">
-                <input type="text" id="tickerInput" value="TSLA" class="bg-gray-900 border border-gray-700 px-4 py-2 rounded-xl text-center font-bold tracking-wide text-sky-300 uppercase focus:outline-none focus:border-sky-500 w-28">
-                <div class="flex items-center gap-2 bg-gray-900 border border-gray-700 px-4 py-1.5 rounded-xl">
+                <input type="text" id="tickerInput" value="TSLA" class="bg-gray-900/50 border border-gray-700 px-4 py-2 rounded-xl text-center font-bold tracking-wide text-sky-300 uppercase focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400 transition-all duration-300 w-28 shadow-inner">
+                
+                <div class="flex items-center gap-2 bg-gray-900/50 border border-gray-700 px-4 py-1.5 rounded-xl shadow-inner">
                     <label class="text-xs text-gray-400 uppercase font-semibold">Sigma Threshold:</label>
                     <input type="number" id="sigmaInput" value="2.5" step="0.1" min="1.0" class="bg-transparent text-emerald-400 font-bold focus:outline-none w-12 text-center">
                 </div>
-                <button onclick="fetchMarketAnalysis()" class="bg-sky-500 hover:bg-sky-600 text-gray-950 font-bold px-5 py-2 rounded-xl transition duration-200 cursor-pointer shadow-lg shadow-sky-500/20">Analyze Matrix</button>
+                
+                <button onclick="fetchMarketAnalysis()" class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold px-5 py-2 rounded-xl transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(56,189,248,0.4)] hover:shadow-[0_0_25px_rgba(56,189,248,0.6)] transform hover:-translate-y-0.5">Analyze Matrix</button>
             </div>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 glass-panel p-6 rounded-2xl flex flex-col justify-between min-h-[400px]">
+            <div class="lg:col-span-2 glass-panel-premium p-6 rounded-2xl flex flex-col justify-between min-h-[400px]">
                 <h2 class="text-lg font-semibold text-gray-300 tracking-wide mb-4">Asset Variance Spectrum</h2>
                 <div class="relative w-full h-full flex items-center justify-center">
                     <canvas id="marketChart"></canvas>
                 </div>
             </div>
 
-            <div class="glass-panel p-6 rounded-2xl flex flex-col max-h-[440px]">
+            <div class="glass-panel-premium p-6 rounded-2xl flex flex-col max-h-[440px]">
                 <div class="flex justify-between items-center border-b border-gray-800 pb-3 mb-4">
                     <h2 class="text-lg font-semibold text-gray-300 tracking-wide">Anomaly Stream</h2>
                     <span id="anomalyCount" class="bg-rose-500/10 text-rose-400 text-xs px-2.5 py-1 rounded-full font-bold border border-rose-500/20">0 Signals</span>
@@ -64,28 +103,24 @@
         let systemChart = null;
 
         async function fetchMarketAnalysis() {
-            // 1. Get the raw value and remove extra spaces
             const rawTicker = document.getElementById('tickerInput').value.trim();
             const alertStream = document.getElementById('alertStream');
             
-            // 2. STRICT CHECK: If it is empty, stop the engine and show an error
             if (!rawTicker) {
-                alertStream.innerHTML = `<p class="text-sm text-rose-400 font-medium">Input Error: Please enter a valid stock ticker (e.g., AAPL, NVDA).</p>`;
-                
-                // Clear the chart and reset counts to prevent ghost data
+                alertStream.innerHTML = `<p class="text-sm text-rose-400 font-medium">Input Error: Please enter a valid stock ticker.</p>`;
                 if (systemChart) systemChart.destroy(); 
                 document.getElementById('anomalyCount').innerText = `0 Signals`;
-                return; // Halt execution
+                return;
             }
 
-            // 3. Proceed normally if check passes
             const ticker = rawTicker;
             const sigma = document.getElementById('sigmaInput').value || 2.5;
             const anomalyCount = document.getElementById('anomalyCount');
             
-            alertStream.innerHTML = '<p class="text-sm text-gray-500 animate-pulse">Running mathematical regressions...</p>';
+            alertStream.innerHTML = '<p class="text-sm text-sky-400 animate-pulse font-medium tracking-wide">Executing mathematical regressions...</p>';
 
             try {
+                // IMPORTANT: Ensure this URL points to your live Render server
                 const response = await fetch(`https://quant-anomaly-engine.onrender.com/api/analyze?ticker=${ticker}&sigma=${sigma}`);
                 const data = await response.json();
 
@@ -94,17 +129,14 @@
                     return;
                 }
 
-                // Process anomaly positions mapping for Chart.js rendering layers
                 const anomalyPoints = Array(data.prices.length).fill(null);
                 data.anomalies.forEach(anomaly => {
                     const idx = data.dates.indexOf(anomaly.date);
                     if (idx !== -1) anomalyPoints[idx] = data.prices[idx];
                 });
 
-                // Clear prior instance vectors
                 if (systemChart) systemChart.destroy();
 
-                // Generate high-fidelity canvas visualization framework
                 const ctx = document.getElementById('marketChart').getContext('2d');
                 systemChart = new Chart(ctx, {
                     type: 'line',
@@ -133,31 +165,56 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        interaction: {
+                            mode: 'index',
+                            intersect: false, // Instant tooltip snapping
+                        },
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                titleColor: '#38bdf8',
+                                bodyColor: '#f1f5f9',
+                                borderColor: 'rgba(56, 189, 248, 0.3)',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
+                                titleFont: { size: 14, weight: 'bold' },
+                                bodyFont: { size: 13 },
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Valuation: $${context.parsed.y.toFixed(2)}`;
+                                    }
+                                }
+                            }
+                        },
                         scales: {
-                            x: { grid: { color: 'rgba(48, 54, 65, 0.2)' }, ticks: { color: '#8b949e', maxTicksLimit: 8 } },
-                            y: { grid: { color: 'rgba(48, 54, 65, 0.2)' }, ticks: { color: '#8b949e' } }
+                            x: { grid: { color: 'rgba(48, 54, 65, 0.15)' }, ticks: { color: '#8b949e', maxTicksLimit: 8 } },
+                            y: { grid: { color: 'rgba(48, 54, 65, 0.15)' }, ticks: { color: '#8b949e' } }
                         }
                     }
                 });
 
-                // Render real-time alert modules
+                // Update metrics and streams
                 anomalyCount.innerText = `${data.anomalies.length} Signals`;
                 alertStream.innerHTML = '';
                 
                 if (data.anomalies.length === 0) {
                     alertStream.innerHTML = '<p class="text-sm text-emerald-400 font-medium">✅ Equilibrium maintained. No market distortions detected.</p>';
                 } else {
-                    // Sort descending chronologically
-                    data.anomalies.reverse().forEach(anomaly => {
+                    data.anomalies.reverse().forEach((anomaly, index) => {
                         const card = document.createElement('div');
-                        card.className = 'p-3 rounded-xl bg-rose-950/20 border border-rose-500/20 flex justify-between items-center';
+                        // Added animated cascading entrance classes and dynamic hover states
+                        card.className = 'animate-slide-up p-3 rounded-xl bg-gray-900/50 backdrop-blur-md border border-rose-500/30 flex justify-between items-center transition-all duration-300 hover:border-rose-400 hover:bg-rose-950/40 cursor-pointer';
+                        card.style.animationDelay = `${index * 0.05}s`;
+                        card.style.opacity = '0';
+                        
                         card.innerHTML = `
                             <div>
                                 <p class="text-sm font-bold text-rose-400">${anomaly.date}</p>
-                                <p class="text-xs text-gray-400">Residual: ${anomaly.deviation > 0 ? '+' : ''}${anomaly.deviation}</p>
+                                <p class="text-xs text-gray-400 font-medium mt-0.5">Residual: ${anomaly.deviation > 0 ? '+' : ''}${anomaly.deviation}</p>
                             </div>
-                            <span class="text-sm font-semibold tracking-tight text-gray-200">$${anomaly.price}</span>
+                            <span class="text-sm font-bold tracking-tight text-gray-200">$${anomaly.price}</span>
                         `;
                         alertStream.appendChild(card);
                     });
@@ -168,7 +225,6 @@
             }
         }
 
-        // Initialize execution matrix on DOM layout completion
         window.onload = fetchMarketAnalysis;
     </script>
 </body>
